@@ -8,7 +8,7 @@ public class dominoTrigger : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		Debug.Log(other.gameObject.name);
 		if(other.gameObject.name != "Plane") {
-			mrManager.FadeOut();
+			other.gameObject.transform.parent.GetComponent<DominoManager>().FadeOut();
 			mrDirector.ChangeMood(other.gameObject.name == "Happy Domino" ? EmotionalState.Happy : EmotionalState.Sad);
 		}
 	}
