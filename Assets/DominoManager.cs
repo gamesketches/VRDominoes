@@ -25,7 +25,6 @@ public class DominoManager : MonoBehaviour {
 	void Update () {
 		foreach(Rigidbody obj in dominosRB) {
 			if(obj.transform.localRotation.eulerAngles.x < 1f) {
-				Debug.Log(obj.transform.rotation.eulerAngles);
 				return;
 			}
 			else {
