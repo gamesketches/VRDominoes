@@ -8,6 +8,7 @@ public class Director : MonoBehaviour {
 	public GameObject John;
 	private Animator johnAnimator;
 	public GameObject Roger;
+	private Animator rogerAnimator;
 
 	private int conversationPoint;
 	private int conversationLength = 3;
@@ -21,6 +22,7 @@ public class Director : MonoBehaviour {
 		voiceClips = Resources.LoadAll<AudioClip>("Dialogue");
 		johnVoiceClips = new AudioClip[3] {voiceClips[0], voiceClips[1], voiceClips[2]};
 		johnAnimator = John.GetComponent<Animator>();
+		rogerAnimator = Roger.GetComponent<Animator>();
 		conversationPoint = 0;
 		isTalking = false;
 		johnTalking = true;
@@ -45,9 +47,12 @@ public class Director : MonoBehaviour {
 			}
 			else {
 				conversationPoint++;
+				Debug.Log(conversationPoint);
+				rogerAnimator.SetInteger("conversationPoint", conversationPoint);
+				rogerAnimator.SetInteger("mood", (int)EmotionalState.Sad);
 				foreach(AudioClip clip in voiceClips){
 					if(clip.name == string.Concat("Roger", conversationPoint.ToString(), 
-						((int)EmotionalState.Happy + 1).ToString())) {
+						((int)EmotionalState.Sad + 1).ToString())) {
 						audioPlayer.clip = clip;
 						break;
 					}
