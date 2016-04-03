@@ -16,6 +16,7 @@ public class Director : MonoBehaviour {
 	private bool johnTalking;
 	private AudioClip[] johnVoiceClips;
 	private AudioClip[] voiceClips;
+	private EmotionalState mood;
 	public AudioSource audioPlayer;
 	// Use this for initialization
 	void Start () {
@@ -26,6 +27,7 @@ public class Director : MonoBehaviour {
 		conversationPoint = 0;
 		isTalking = false;
 		johnTalking = true;
+		mood = EmotionalState.Neutral;
 	}
 	
 	// Update is called once per frame
@@ -36,6 +38,10 @@ public class Director : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.R)){
 			Application.LoadLevel(Application.loadedLevel);
 		}
+	}
+
+	public void ChangeMood(EmotionalState newMood) {
+		mood = newMood;
 	}
 
 	IEnumerator PlayAudio() {
@@ -49,14 +55,15 @@ public class Director : MonoBehaviour {
 				conversationPoint++;
 				Debug.Log(conversationPoint);
 				rogerAnimator.SetInteger("conversationPoint", conversationPoint);
-				rogerAnimator.SetInteger("mood", (int)EmotionalState.Sad);
+				rogerAnimator.SetInteger("mood", (int)mood);
 				foreach(AudioClip clip in voiceClips){
 					if(clip.name == string.Concat("Roger", conversationPoint.ToString(), 
-						((int)EmotionalState.Sad + 1).ToString())) {
+						((int)mood + 1).ToString())) {
 						audioPlayer.clip = clip;
 						break;
 					}
 				}
+				mood = EmotionalState.Neutral;
 			}
 			audioPlayer.Play();
 			while(audioPlayer.isPlaying) {
