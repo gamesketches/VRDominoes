@@ -13,10 +13,14 @@ public class Director : MonoBehaviour {
 	private bool isTalking;
 	private bool johnTalking;
 	private AudioClip[] voiceClips;
-	public AudioSource audio;
+	public AudioSource audioPlayer;
 	// Use this for initialization
 	void Start () {
 		voiceClips = Resources.LoadAll<AudioClip>("Dialogue");
+		johnAnimator = John.GetComponent<Animator>();
+		conversationPoint = 0;
+		isTalking = false;
+		johnTalking = true;
 	}
 	
 	// Update is called once per frame
@@ -32,12 +36,20 @@ public class Director : MonoBehaviour {
 	IEnumerator PlayAudio() {
 		isTalking = true;
 		if(conversationPoint < voiceClips.Length) {
-			audio.clip = voiceClips[conversationPoint];
-			audio.Play();
-			while(audio.isPlaying) {
+			johnAnimator.SetBool("JohnTalking", johnTalking);
+			if(johnTalking) {
+				audioPlayer.clip = voiceClips[conversationPoint];
+			}
+			else {
+				//audio.clip = voiceClips[conversationPoint ]
+			}
+			audioPlayer.Play();
+			while(audioPlayer.isPlaying) {
 				yield return null;
 			}
+			Debug.Log(conversationPoint);
 			conversationPoint++;
+			johnTalking = !johnTalking;
 			isTalking = false;
 		}
 	}
