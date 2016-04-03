@@ -10,13 +10,16 @@ public class Director : MonoBehaviour {
 	public GameObject Roger;
 
 	private int conversationPoint;
+	private int conversationLength = 3;
 	private bool isTalking;
 	private bool johnTalking;
+	private AudioClip[] johnVoiceClips;
 	private AudioClip[] voiceClips;
 	public AudioSource audioPlayer;
 	// Use this for initialization
 	void Start () {
 		voiceClips = Resources.LoadAll<AudioClip>("Dialogue");
+		johnVoiceClips = new AudioClip[3] {voiceClips[0], voiceClips[1], voiceClips[2]};
 		johnAnimator = John.GetComponent<Animator>();
 		conversationPoint = 0;
 		isTalking = false;
@@ -35,20 +38,25 @@ public class Director : MonoBehaviour {
 
 	IEnumerator PlayAudio() {
 		isTalking = true;
-		if(conversationPoint < voiceClips.Length) {
+		if(conversationPoint < conversationLength) {
 			johnAnimator.SetBool("JohnTalking", johnTalking);
 			if(johnTalking) {
-				audioPlayer.clip = voiceClips[conversationPoint];
+				audioPlayer.clip = johnVoiceClips[conversationPoint];
 			}
 			else {
-				//audio.clip = voiceClips[conversationPoint ]
+				conversationPoint++;
+				foreach(AudioClip clip in voiceClips){
+					if(clip.name == string.Concat("Roger", conversationPoint.ToString(), 
+						((int)EmotionalState.Happy + 1).ToString())) {
+						audioPlayer.clip = clip;
+						break;
+					}
+				}
 			}
 			audioPlayer.Play();
 			while(audioPlayer.isPlaying) {
 				yield return null;
 			}
-			Debug.Log(conversationPoint);
-			conversationPoint++;
 			johnTalking = !johnTalking;
 			isTalking = false;
 		}
