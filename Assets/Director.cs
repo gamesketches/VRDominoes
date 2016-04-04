@@ -8,6 +8,7 @@ public class Director : MonoBehaviour {
 	public GameObject John;
 	private Animator johnAnimator;
 	public GameObject Roger;
+	public GameObject walkingRoger;
 	private Animator rogerAnimator;
 
 	private int conversationPoint;
@@ -18,8 +19,10 @@ public class Director : MonoBehaviour {
 	private AudioClip[] voiceClips;
 	private EmotionalState mood;
 	public AudioSource audioPlayer;
+	private bool rogerArrives = false;
 	// Use this for initialization
 	void Start () {
+		Roger.gameObject.SetActive(false);
 		voiceClips = Resources.LoadAll<AudioClip>("Dialogue");
 		johnVoiceClips = new AudioClip[3] {voiceClips[0], voiceClips[1], voiceClips[2]};
 		johnAnimator = John.GetComponent<Animator>();
@@ -32,11 +35,20 @@ public class Director : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(!isTalking) {
-			StartCoroutine(PlayAudio());
+		if(rogerArrives) {
+			if(!isTalking) {
+				StartCoroutine(PlayAudio());
+			}
+			if(Input.GetKeyDown(KeyCode.R)){
+				Application.LoadLevel(Application.loadedLevel);
+			}
 		}
-		if(Input.GetKeyDown(KeyCode.R)){
-			Application.LoadLevel(Application.loadedLevel);
+		else {
+			if(walkingRoger.gameObject.transform.position.x < 0.3f){
+				walkingRoger.SetActive(false);
+				Roger.gameObject.SetActive(true);
+				rogerArrives = true;
+			}
 		}
 	}
 
