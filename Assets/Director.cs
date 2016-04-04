@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.VR;
 
 public enum EmotionalState {Neutral, Happy, Sad};
 
@@ -22,6 +23,7 @@ public class Director : MonoBehaviour {
 	private bool rogerArrives = false;
 	// Use this for initialization
 	void Start () {
+		VRSettings.renderScale = 0.5f;
 		Roger.gameObject.SetActive(false);
 		voiceClips = Resources.LoadAll<AudioClip>("Dialogue");
 		johnVoiceClips = new AudioClip[3] {voiceClips[0], voiceClips[1], voiceClips[2]};

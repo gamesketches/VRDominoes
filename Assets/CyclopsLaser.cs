@@ -15,8 +15,9 @@ public class CyclopsLaser : MonoBehaviour {
 		Ray PsychicRay = new Ray(transform.position, transform.forward);
 
 		if(Physics.Raycast(PsychicRay, out hit, rayLength)){
+			Debug.Log(hit.collider.gameObject);
 			if(hit.rigidbody) {
-				hit.rigidbody.AddForceAtPosition(PsychicRay.direction * 100f, hit.point);
+				hit.rigidbody.AddForceAtPosition(PsychicRay.direction * 1500f, hit.point);
 			}
 		}
 		Debug.DrawRay(transform.position, transform.forward * rayLength);
